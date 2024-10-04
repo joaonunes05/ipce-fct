@@ -15,18 +15,16 @@ def how_many_roots(a: float, b:float, c:float) -> int:
 def root_left(a: float, b: float, c: float) -> float:
     if a < 0:
         x = (-b + math.sqrt(disc(a, b, c)))/(2*a)
-        return x
     else:
         x = (-b - math.sqrt(disc(a, b, c)))/(2*a)
-        return x
+    return x
 
 def root_right(a: float, b: float, c: float) -> float:
     if a > 0:
         x = (-b + math.sqrt(disc(a, b, c)))/(2*a)
-        return x
     else:
         x = (-b - math.sqrt(disc(a, b, c)))/(2*a)
-        return x
+    return x
 
 def main():
     a = float(input("A: "))
