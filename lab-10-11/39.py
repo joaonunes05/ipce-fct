@@ -56,21 +56,17 @@ def equal(l1: IList, l2: IList) -> bool:
     """
     # Challenge: do not use l1 == l2; instead, compare the various elements.
     for i in range(len(l1)):
-        if l1[i] == l2[i]:
-            pass
-        else:
+        if l1[i] != l2[i]:
             return False
-        return True
+    return True
 
 def longest_ascending(l: IList) -> int:
     """ Length of the longest ascending subsequence in l. """
     maxCount = 0
     count = 1
 
-    lSort = sorted(l)
-
-    for i in range(len(lSort) - 1):
-        if lSort[i] == lSort[i + 1] - 1:
+    for i in range(len(l) - 1):
+        if l[i] < l[i + 1]:
             count += 1
         else:
             maxCount = max(maxCount, count)
@@ -130,19 +126,19 @@ def is_ascending(l: IList) -> bool:
 def summation(l: IList) -> int:
     """ Add all the elements of the list """
     # Challenge: do not use sum(l).
-    sum = 0
+    sumTotal = 0
     for item in l:
-        sum += item
-    return sum
+        sumTotal += item
+    return sumTotal
 
 def dot_product(l1: IList, l2: IList) -> int:
     """ Inner product.
         Precondition: len(l1) == len(l2)
     """
-    prod = 0
+    prodInt = 0
     for i in range(len(l1)):
-        prod += (l1[i]+l2[i])
-    return prod
+        prodInt += (l1[i]*l2[i])
+    return prodInt
 
 def interpreter():
     la = [1, -2, 3, -4, 40, 50]  # list A
