@@ -84,41 +84,65 @@ def maximum(l: IList) -> int:
     """ Maximum of list l.
         Precondition: len(l) > 0
     """
+    max = l[0]
     for i in range(len(l)):
-        pass
-
+        if l[i] > max:
+            max = l[i]
+            
+    return max
 
 def copy_even_numbers(l1: IList, l2: IList):
     """ Copy only the even numbers from l1 to l2.
         Fills with 0s the remaining free space at the end of l2.
         Precondition: len(l1) == len(l2)
     """
-    pass # TO DO
+    j = 0
+    for i in range(len(l1)):
+        if l1[i]%2 == 0:
+            l2[j]= l1[i]
+            j += 1
+            
 
 def proportion_of_even_numbers(l: IList) -> float:
     """ Proportion of even numbers in l.
         Precondition: len(l) > 0
     """
-    pass # TO DO
-    return 0.0
+    even = 0
+    
+    for item in l:
+        if item%2 == 0:
+            even += 1
+    prop = even / len(l)
+    return prop
 
 def is_ascending(l: IList) -> bool:
     """ Is l ascending in strict sense? """
-    pass # TO DO
-    return False
+    lSort = sorted(l)
+    
+    for i in range(len(lSort)-1):
+        if lSort[i] == lSort[i+1]:
+            return False
+    
+    if l != lSort:
+        return False
+    return True
 
 def summation(l: IList) -> int:
     """ Add all the elements of the list """
     # Challenge: do not use sum(l).
-    pass # TO DO
-    return 0
+    sum = 0
+    for item in l:
+        sum += item
+    return sum
 
 def dot_product(l1: IList, l2: IList) -> int:
     """ Inner product.
         Precondition: len(l1) == len(l2)
     """
-    pass # TO DO
-    return 0
+    prod = 0
+    for i in range(len(l1)):
+        prod += (l1[i]+l2[i])
+    return prod
 
 def interpreter():
     la = [1, -2, 3, -4, 40, 50]  # list A
