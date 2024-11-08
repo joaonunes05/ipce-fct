@@ -53,7 +53,7 @@ def date_is_less(dt1: Date, dt2: Date) -> bool:
     """ Check if dt1 < dt2.
         Precondition: date_is_valid(dt1) and date_is_valid(dt2)
      """
-    return (next((x  for x in [a - b for a, b in zip(dt1, dt2)] if x != 0), 0) < 0)
+    return (next((x  for x in [a - b for a, b in zip(dt1, dt2)][::-1] if x != 0), 0) < 0)
 
 
 def date_is_equal(dt1: Date, dt2: Date) -> bool:
@@ -68,8 +68,8 @@ def date_order(dt: Date) -> int:
     """
     day, month, year = dt
     days = 0
-    for i in range(month - 1):
-        days = days + month_length(month, year)
+    for i in range(1,month):
+        days = days + month_length(i, year)
     days = days + day
     return days
 
