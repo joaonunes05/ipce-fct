@@ -53,9 +53,7 @@ def date_is_less(dt1: Date, dt2: Date) -> bool:
     """ Check if dt1 < dt2.
         Precondition: date_is_valid(dt1) and date_is_valid(dt2)
      """
-    day1, month1, year1 = dt1
-    day2, month2, year2 = dt2
-    return any(x < 0 for x in [a - b for a, b in zip(dt1, dt2)] if x != 0)
+    return (next((x  for x in [a - b for a, b in zip(dt1, dt2)] if x != 0), 0) < 0)
 
 
 def date_is_equal(dt1: Date, dt2: Date) -> bool:
@@ -138,26 +136,22 @@ def dates_maximum(dts: Dates) -> Date:
     """ Maximum date.
         Precondition:
     """
-    maxday = maxmonth = maxyear = 0
+    maxdate = dts[0]
     for date in dts:
-        day, month, year = date
-        maxday = max(maxday, day)
-        maxmonth = max(maxmonth, month)
-        maxyear = max(maxyear, year)
-    return (maxday, maxmonth, maxyear)
+        if (date_is_less(maxdate, date)):
+            maxdate = date
+    return (maxdate)
 
 def dates_minimum(dts: Dates) -> Date:
     """ Minimum date.
         Precondition:
            len(dts) > 0 and all(valid_date(dt) for dt in dts)
     """
-    minday, minmonth, minyear = dts[0]
+    mindate = dts[0]
     for date in dts:
-        day, month, year = date
-        minday = min(minday, day)
-        minmonth = min(minmonth, month)
-        minyear = min(minyear, year)
-    return (minday, minmonth, minyear)
+        if (date_is_less(date, mindate)):
+            mindate = date
+    return mindate
     
 ############# main #############
 
