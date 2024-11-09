@@ -36,12 +36,11 @@ def interaction(secret: str, max_attempts: int):
     print("Bem-vindo ao Jogo da Forca!")
     visible = ['#'] * len(secret)   # é preciso usar uma lista mutável; uma string não serve
     attempts = 0
-    print_visible(visible)
     for attempts in range(max_attempts):
         if got_it_right(visible, secret):
             break
-        update_visible(visible, secret, input_letter(f'{(attempts + 1):02} - Adivinhe uma letra: '))
         print_visible(visible)
+        update_visible(visible, secret, input_letter(f'{(attempts + 1):02d} - Adivinhe uma letra: '))
     end_game(visible, secret, attempts)
 
 def main():
