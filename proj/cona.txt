@@ -1,0 +1,16 @@
+# Datas de nascimento dos monarcas da segunda dinastia
+
+
+1/1/2000   Teste A
+1/1/2000   Teste C
+
+11/4/1357 D. João I
+31/10/1391 D. Duarte I
+15/1/1432 D. Afonso V
+3/5/1455 D. João II
+31/5/1469 D. Manuel I
+6/6/1502 D. João III
+20/1/1554 D. Sebastião I
+
+1/1/1531 D. António I
+31/1/1512 D. Henrique I

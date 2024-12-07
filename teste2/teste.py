@@ -76,3 +76,56 @@ def is_balanced_d(s: str) -> bool:
 
     return count_open == count_closed
 
+class Flight:
+    def __init__(self, line: str): # inicialização dum voo diário
+        l = line.split()
+        self.code, self.origin, self.destination = l[0], l[1], l[2] # strings
+        self.takeoff, self.landing = int(l[3]), int(l[4]) # inteiros
+    
+    def change_day(self) -> bool: # muda de dia, a meio do voo
+        return self.landing <= self.takeoff
+    
+class Flights:
+    def __init__(self, file_name: str):
+        self.all = self.load(file_name)
+    def load(self, file_name: str) -> list[Flight]:
+        file = open('mock_file.txt', 'r')
+        l = []
+        for line in file:
+            l.append(Flight(line))
+
+    def origin_or_destination(self, airport: str) -> list[Flight]:
+         return [flight for flight in self.all if (flight.origin == airport or flight.destination == airport)]
+
+    def how_many_days_voyage(self, voyage: list[Flight]) -> int:
+        duration = 0
+        prev_landing = -1
+        for flight in voyage:
+            if flight not in self.all:
+                return -1
+            elif flight.change_day:
+                if prev_landing > flight.takeoff or prev_landing == -1:
+                    duration += 2
+                else:
+                    duration += 1
+            else:
+                if prev_landing > flight.takeoff or prev_landing == -1:
+                    duration += 1
+                else:
+                    continue
+            prev_landing = flight.landing
+
+        return duration
+    
+    #METODOS EXTRA
+        
+    def possible3(self, origin: str, destination: str) -> bool:
+        pass
+
+def main():
+    fs = Flights("voos.txt")
+    print(len(fs.origin_or_destination("Lisboa")))
+    if fs.possible3("Lisboa", "Warsaw"):
+        print("Possível")
+    else:
+        print("Impossível")
