@@ -52,6 +52,13 @@ class Util:
     def error(mesg: str):
         """ Issue an error message. """
         print("ERRO:", mesg)
+        print('')
+
+    @staticmethod
+    def printf(mesg: str):
+        """Prints in correct format - blanck line after"""
+        print(mesg)
+        print('')
 
     @staticmethod
     def help():
@@ -79,6 +86,7 @@ class Util:
         print('|Z s1 s2 s3| Cria cronologia s1 com a uniao de s2 e s3          |')
         print('|Q         | Fecha o programa                                   |')
         print('-----------------------------------------------------------------')
+        print('')
 
 
 class DateFormats:
@@ -154,7 +162,7 @@ class DateFormats:
         if current_line:
             calendar_lines.append(current_line.rstrip())
 
-        return '\n'.join(calendar_lines)
+        return '\n'.join(calendar_lines) + '\n'
 
     @staticmethod
     def get_line_in_year(month: int, year: int, l: int) -> str:
@@ -179,7 +187,7 @@ class DateFormats:
             full_calendar.append(''.join(line))
             line2 = [DateFormats.cal_month(x, year).split('\n')[1] + '  ' for x in range(quarter, quarter + 3)]
             full_calendar.append(''.join(line2))
-            for l in range(2,max([len(DateFormats.cal_month(x, year).split('\n')) for x in range(quarter, quarter + 3)])):
+            for l in range(2,max([len(DateFormats.cal_month(x, year).split('\n')) - 1 for x in range(quarter, quarter + 3)])):
                 full_calendar.append(DateFormats.get_line_in_year(quarter, year, l))
             full_calendar.append('')
 
@@ -435,7 +443,7 @@ class Date:
         day = self.next().day if (self.day == 29 and self.month == 2 and not Date.is_leap(Date.today().year))\
             else self.day
         age = Date.today().year - self.year if \
-            Date.today().month >= self.month \
+            Date.today().month > self.month \
             or (Date.today().month == self.month and Date.today().day >= day) \
             else Date.today().year - self.year - 1
         return age
@@ -541,7 +549,7 @@ class Chronology:
 
     def sort(self: Chronology):  # PRIVATE
         """ Sort by key. """
-        self.events = dict(sorted(self.events.items(), key = lambda item: item[1]))
+        self.events = dict(sorted(self.events.items(), key = lambda item: (item[1], item[0])))
 
     def __repr__(self: Chronology) -> str:
         """ Convert chronology to string, to display. """
@@ -640,7 +648,7 @@ class UI:   # User Interface
 
     def welcome(self: UI):  # PRIVATE
         """ Print an welcome message. """
-        print(UI.PROG_NAME)
+        Util.printf(UI.PROG_NAME)
 
     def input_command(self: UI) -> (str, list[str]):  # PRIVATE
         """ Process the command line. """
@@ -692,23 +700,23 @@ class UI:   # User Interface
         error = self.get_args(args, "")
         if error: return
         print(UI.PROG_NAME)
-        print("Autores: Afonso Castro (69855), Joao Nunes (71710)")
+        Util.printf("Autores: Afonso Castro (69855), Joao Nunes (71710)")
 
     def command_plus(self: UI, args: list[str]):  # PRIVATE
         error, d, n = self.get_args(args, "di")
         if error: return
         res = d.move(n)
-        print(res)
+        Util.printf(res)
 
     def command_less(self: UI, args: list[str]):  # PRIVATE
         error, d1, d2 = self.get_args(args, "dd")
         if error: return
         res = d1.distance(d2)
-        print(res)
+        Util.printf(res)
 
     @staticmethod
     def command_today():  # PRIVATE
-        print(Date.today())
+        Util.printf(Date.today())
 
     def command_days(self: UI, args: list[str]):
         error, y , m = self.get_args(args, "ii")
@@ -719,10 +727,10 @@ class UI:   # User Interface
             return
         if m == 0:
             res = Date.year_lenght(y)
-            print(res)
+            Util.printf(res)
             return
         res = Date.month_length(m, y)
-        print(res)
+        Util.printf(res)
 
     def command_holidays(self: UI, args: list[str]):
         error, y, m = self.get_args(args, "ii")
@@ -735,7 +743,7 @@ class UI:   # User Interface
             d.set_fixed_holidays(c)
             d.set_non_fixed_holidays()
             d.set_holidays()
-            print(d.holidays)
+            Util.printf(d.holidays)
         elif Date.is_valid(Date(1, m, y)):
             d = Date(1, m, y)
             c = Chronology.from_file('feriados_fixos.txt')
@@ -744,9 +752,9 @@ class UI:   # User Interface
             d.set_non_fixed_holidays()
             d.set_holidays()
             if not d.get_month_hollidays():
-                print("Nada.")
+                Util.printf("Nada.")
                 return
-            print(d.get_month_hollidays())
+            Util.printf(d.get_month_hollidays())
         else:
             Util.error("Argumentos inválidos.")
             return
@@ -759,22 +767,23 @@ class UI:   # User Interface
         if a == -1:
             Util.error("Você ainda não nasceu.")
             return
-        print(a)
+        Util.printf(a)
 
     def command_weekday(self: UI, args: list[str]):
         error, d = self.get_args(args, "d")
 
         if error: return
-        print(DateFormats.to_day_of_week(d))
+        Util.printf(DateFormats.to_day_of_week(d))
 
     def command_FT13(self: UI, args: list[str]):
         error, y = self.get_args(args, "i")
         if error: return
         if y == 0:
-            Util.error("Argumentos Inválidos.")
+            Util.error("Argumentos inválidos.")
             return
         for x in Date.fridays13(y):
             print(x)
+        print('')
 
     def command_add_crono(self: UI, args: list[str]):
         error, n, p = self.get_args(args, "ss")
@@ -783,11 +792,12 @@ class UI:   # User Interface
             with open(p, 'r'):
                 try:
                     self.repository.load(n, p)
-                    print(f"Foram carregados {len(self.repository.cronos[n].events)} elementos.")
                     for value in self.repository.cronos[n].events.values():
                         if not value.is_valid():
                             del(self.repository.cronos[n])
-                            print(f"O ficheiro '{p}' contém uma cronologia inválida.")
+                            Util.error(f"O ficheiro '{p}' contém uma cronologia inválida.")
+                            return
+                    Util.printf(f"Foram carregados {len(self.repository.cronos[n].events)} elementos.")
                 except:
                     Util.error(f"O ficheiro '{p}' contém uma cronologia inválida.")
 
@@ -801,9 +811,9 @@ class UI:   # User Interface
             Util.error(f"Não existe uma cronologia com o nome '{n}'.")
             return
         elif not self.repository.get(n).events:
-            print('Nada.')
+            Util.printf('Nada.')
         else:
-            print(self.repository.get(n))
+            Util.printf(self.repository.get(n))
 
     def command_repeated_crono(self: UI, args: list[str]):
         error, n1, n2  = self.get_args(args, "ss")
@@ -849,7 +859,7 @@ class UI:   # User Interface
         elif d1 > d2:
             Util.error("Argumentos inválidos.")
             return
-        print(d1.get_max_holidays(d2, n))
+        Util.printf(d1.get_max_holidays(d2, n))
 
     def command_calendar(self: UI, args: list[str]):
         error, y, m = self.get_args(args, "ii")
@@ -893,7 +903,7 @@ class UI:   # User Interface
             elif command == 'Q': break
             elif command == ' ': pass
             else: Util.error("Comando desconhecido.")
-        print("Execução terminada.")
+        Util.printf("Execução terminada.")
 
     def run(self: UI):
         self.interpreter()
